@@ -55,4 +55,9 @@
     width:45%;
 }
 
-.position {word-wrap:break-word;}
+
+.job-list{
+    cursor:pointer;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}

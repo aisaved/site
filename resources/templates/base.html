@@ -63,14 +63,24 @@
       
     </div><!-- /container -->
     
-    <input type="hidden" value="{{csrfmiddlewaretoken}}" id="csrfmiddlewaretoken"/>
+    <input type="hidden" value="{{csrf-token}}" id="__anti-forgery-token"/>
     <script src="/js/jquery-1.11.3.min.js"></script>
     <script src="/js/vendor/bootstrap.min.js"></script>
     {%script "/assets/js/script.js" %}
+     {% if dev %}
+      <script src="https://fb.me/react-0.13.3.min.js"></script>
+      {% script "/cljs/out/goog/base.js" %}
+      {% script "/cljs/app.js" %}
+      <script type="text/javascript">goog.require("centipair.app");</script>
+    {% else %}
+      <!--<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.11.2/react.min.js"></script>-->
+      {% script "/cljs/app.js" %}
+    {% endif %}
     <script type="text/javascript">
         var context = "{{servlet-context}}";
     </script>
-    
+    {% block page-scripts %}
+    {% endblock %}
       
     </body>
 </html>
