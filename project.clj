@@ -34,6 +34,7 @@
                  [secretary "1.2.3"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [cljs-ajax "0.3.11"]
+                 [com.lucasbradstreet/cljs-uuid-utils "1.0.1"]
                  [org.immutant/web "2.0.0"]]
 
   :min-lein-version "2.0.0"
@@ -51,7 +52,8 @@
             [lein-cljsbuild "1.0.5"]]
     
   
-  :clean-targets ^{:protect false} ["resources/public/cljs"]
+  :clean-targets ^{:protect false} ["resources/public/cljs"
+                                    "resources/public/cljs-admin"]
   
   :cljsbuild
   {:builds
@@ -62,7 +64,16 @@
       :externs ["react/externs/react.js"]
       :optimizations :none
       :output-to "resources/public/cljs/app.js"
-      :pretty-print true}}}}
+      :pretty-print true}}
+    :app-admin
+    {:source-paths ["src-cljs-admin"]
+     :compiler
+     {:output-dir "resources/public/cljs-admin/out"
+      :externs ["react/externs/react.js"]
+      :optimizations :none
+      :output-to "resources/public/cljs-admin/app-admin.js"
+      :pretty-print true}}
+    }}
   
   :immutant {:war 
            {:context-path "/"}}
@@ -76,7 +87,12 @@
                :builds
                {:app
                 {:source-paths ["env/prod/cljs"]
-                 :compiler {:optimizations :advanced :pretty-print false}}}} 
+                 :compiler {:optimizations :advanced :pretty-print false}}
+                :app-admin
+                {:source-paths ["env/prod/cljs-admin"]
+                 :compiler {:optimizations :advanced :pretty-print false}}}
+               
+               } 
              
              :aot :all}
    :dev {:dependencies [[ring-mock "0.1.5"]
@@ -90,7 +106,10 @@
           :cljsbuild
           {:builds
            {:app
-            {:source-paths ["env/dev/cljs"] :compiler {:source-map true}}}} 
+            {:source-paths ["env/dev/cljs"] :compiler {:source-map true}}
+            :app-admin
+            {:source-paths ["env/dev/cljs-admin"] :compiler {:source-map true}}
+            }} 
          
          :figwheel{:http-server-root "public"
           :server-port 3449

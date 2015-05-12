@@ -5,5 +5,9 @@
 
 
 (defn projects-dashboard []
-  
-  )
+  (layout/render
+    "sbadmin.html"))
+
+
+(defroutes dashboard-routes 
+  (GET "/dashboard" [] (projects-dashboard)))
