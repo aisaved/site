@@ -59,8 +59,8 @@
 .job-list{
     cursor:pointer;
     border-bottom: 1px solid #eee;
-    padding-top: 7px;
-    padding-bottom: 7px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .job-list:hover{
