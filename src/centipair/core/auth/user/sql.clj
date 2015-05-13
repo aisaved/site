@@ -32,9 +32,8 @@
 (defn login-success
   "What happens after a successful login"
   [user-account auth-token]
-  (if (:is_admin user-account)
-    {:status-code 200 :message "admin" :redirect "/admin" :auth-token auth-token}
-    {:status-code 200 :message "user" :redirect "/dashboard" :auth-token auth-token}))
+  {:status-code 200 :message "success" :redirect "/dashboard" :auth-token auth-token})
+
 
 (def registration-success {:status-code 200 :message "Registration success"})
 

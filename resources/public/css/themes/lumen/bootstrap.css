@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic");
+@import url(http://fonts.googleapis.com/css?family=Roboto);
 /*!
  * bootswatch v3.3.4+1
  * Homepage: http://bootswatch.com
@@ -1084,8 +1084,8 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
-  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-family: "roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
   line-height: 1.42857143;
   color: #555555;
   background-color: #ffffff;
@@ -4420,7 +4420,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
   color: #333333;
-  background-color: transparent;
+  background-color: #F16529;
 }
 .navbar-default .navbar-nav > .disabled > a,
 .navbar-default .navbar-nav > .disabled > a:hover,
@@ -5842,7 +5842,7 @@ button.close {
   position: absolute;
   z-index: 1070;
   display: block;
-  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 12px;
   font-weight: normal;
   line-height: 1.4;
@@ -5949,7 +5949,7 @@ button.close {
   display: none;
   max-width: 276px;
   padding: 1px;
-  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   font-weight: normal;
   line-height: 1.42857143;

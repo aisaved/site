@@ -4,7 +4,9 @@
             [centipair.core.components.notifier :as notify]
             [secretary.core :as secretary :refer-macros [defroute]]
             [goog.events :as events]
-            [goog.history.EventType :as EventType])
+            [goog.history.EventType :as EventType]
+            [centipair.job.forms :as job-forms]
+            )
   (:import goog.History))
 
 
@@ -12,7 +14,7 @@
 
 (def admin-menu (reagent/atom 
                  [{:label "Dashboard" :url "/dashboard" :id "dashboard" :active false}
-                  {:label "My projects" :url "/projects" :id "projects" :active false }
+                  {:label "My Jobs" :url "/jobs" :id "jobs" :active false }
                   {:label "Responses" :url "/responses" :id "responses" :active false}
                   {:label "Applications" :url "/applications" :id "applications" :active false}]))
 
@@ -80,9 +82,9 @@
   (js/console.log "dashboard"))
 
 
-(defroute projects "/projects" []
-  (activate-side-menu-item "projects")
-  (js/console.log "projects"))
+(defroute jobs "/jobs" []
+  (activate-side-menu-item "jobs")
+  (job-forms/render-job-form))
 
 
 (defroute responses "/responses" []
