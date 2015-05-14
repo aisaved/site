@@ -21,11 +21,15 @@
     (put! markdown-html-channel [field value]))
 
 
+(defn apply-preview [field]
+  (dom/innerHtml "markdown-preview" (:html @field)))
+
+
 (defn generate-preview [field-value-group]
   (let [field (first field-value-group)
         value (second field-value-group)]
     (reset! field (assoc @field :html (md->html (js/safe_tags_regex value))))
-    (dom/innerHtml "markdown-preview" (:html @field))))
+    (apply-preview field)))
 
 
 
@@ -40,7 +44,8 @@
        [:a {:href "#md-editor" 
             :aria-controls "md-editor"
             :role "tab"
-            :data-toggle "tab"} "Editor"]]
+            :data-toggle "tab"
+            :on-click #(apply-preview field)} "Editor"]]
       [:li {:class "" :role "presentation"}
        [:a {:href "#md-preview" 
             :aria-controls "md-preview"
@@ -50,7 +55,7 @@
       [:div {:class "tab-pane active" :role "tab-panel" :id "md-editor"}
        [:div {:class (if (nil? (:class-name @field)) style/bootstrap-input-container-class (:class-name @field))
               :key (str "container-" (:id @field))}
-        [:label {:for (:id @field) :class "control-label" :key (str "label-" (:id @field))} (:label @field)]
+        [:label {:for (:id @field) :class "control-label" :key (str "description-label-" (:id @field))} (:description @field)]
         [:textarea {:class "form-control"
                     :type (:type @field) :id (:id @field)
                     :placeholder

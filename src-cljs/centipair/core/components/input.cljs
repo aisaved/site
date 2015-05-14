@@ -206,7 +206,7 @@
 
 
 (defn button-field [form form-fields action-button]
-  [:a {:class style/bootstrap-primary-button-class
+  [:a {:class (str style/bootstrap-primary-button-class " btn-near") 
        :on-click #(perform-action form (:on-click action-button) form-fields)
        :disabled ""
        :key (:id action-button)
