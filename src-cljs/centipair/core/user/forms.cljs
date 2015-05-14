@@ -29,8 +29,7 @@
    registration-form-state
    "/api/register"
    [username email password confirm-password]
-   (fn [response] (.log js.console "yay!!!"))
-   ))
+   (fn [response] (.log js.console "yay!!!"))))
 
 (def register-submit-button (atom {:label "Submit" :on-click register-submit :id "register-submit-button"}))
 

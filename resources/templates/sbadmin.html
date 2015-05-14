@@ -204,6 +204,11 @@
     
     }, false);
   </script>  
+  <script>
+     function safe_tags_regex(str) {
+     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+     }
+  </script>
   
 </body>
 

@@ -4,6 +4,9 @@
             [liberator.representation :refer [ring-response]]))
 
 
+(defn redirect [url]
+  (ring-response/redirect url))
+
 (defn status-code
   [status]
   (if (nil? status) 

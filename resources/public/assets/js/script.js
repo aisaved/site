@@ -16,3 +16,4 @@ function rotateBanner(){
     $(currentBanner).fadeOut( "fast", function() {$(newBanner).fadeIn("fast");});
     currentBanner = newBanner;
 }
+

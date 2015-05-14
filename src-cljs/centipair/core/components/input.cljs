@@ -202,19 +202,25 @@
     (do
       (swap! form assoc :message "")
       (action))
-    (swap! form assoc :message "Form error!")))
+    (swap! form assoc :message "Invalid data!")))
+
+
+(defn button-field [form form-fields action-button]
+  [:a {:class style/bootstrap-primary-button-class
+       :on-click #(perform-action form (:on-click action-button) form-fields)
+       :disabled ""
+       :key (:id action-button)
+       } 
+   (:label action-button)])
 
 
 (defn button
   [form form-fields action-button]
   [:div {:class style/bootstrap-input-container-class}
    [:div {:class "col-sm-offset-2 col-sm-6"}
-    [:a {:class style/bootstrap-primary-button-class
-         :on-click #(perform-action form (:on-click @action-button) form-fields)
-         :disabled ""
-         :key (:id @action-button)
-         } 
-     (:label @action-button)]]])
+    (if (= (:type @action-button) "button-group")
+      (doall (map (partial button-field form form-fields) (:buttons @action-button)))
+      (button-field form form-fields @action-button))]])
 
 
 (defn plain-button
@@ -433,7 +439,8 @@
     "subheading" (subheading field)
     "image-spec" (image-spec field)
     "description" (description field)
-    "datepicker" (datepicker field)))
+    "datepicker" (datepicker field)
+    "markdown" (markdown-editor field)))
 
 
 (defn form-aligned [form form-fields action-button]
@@ -507,8 +514,7 @@
    [:legend [:h3 (:title @form)] [:span {:class "form-error"} (:message @form)]]
    (doall (map plain-input-field form-fields))
    (plain-button form form-fields action-button)
-   ]
-  )
+   ])
 
 (defn reset-text-field
   [field]

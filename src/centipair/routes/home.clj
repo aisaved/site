@@ -10,7 +10,8 @@
     "home.html" ))
 
 
-(defn services-page [])
+(defn services-page []
+  )
 
 
 (defn projects-page [id title]
@@ -24,11 +25,20 @@
   (layout/render "projects-home.html" ))
 
 
+(defn redirect-test []
+  
+  )
+
+(defn join-page []
+  (layout/render "join.html")
+  )
+
 (defn csrf-token []
   (response/json-response {:token *anti-forgery-token*}))
 
 (defroutes home-routes
   (GET "/" [] (home-page))
+  (GET "/join" [] (join-page))
   (GET "/csrf" [] (csrf-token))
   (GET "/projects" [] (projects-home-page))
   (GET "/services" [] (services-page))

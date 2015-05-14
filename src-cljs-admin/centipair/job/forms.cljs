@@ -7,12 +7,21 @@
 
 
 
-(def job-form-state (reagent/atom {:id "job-form" :type "form"}))
-
+(def job-form-state (reagent/atom {:id "job-form" :type "form" :title "Post a job"}))
+(def job-title-description (reagent/atom {:id "job-title-description" :type "description" :label "E.G: Software Engineer at Company"}))
 (def job-title (reagent/atom {:id "job-title" :label "Job Title" :type "text" :validator v/required}))
+(def job-type (reagent/atom {:id "job-type" :label "Type" :type "select"
+                             :options [{:label "Full time" :value "full-time"}
+                                       {:label "Part time" :value "part-time"}
+                                       {:label "Contract" :value "contract"}]}))
 
-(def job-description (reagent/atom {:id "job-description" :label "Job Description" :type "textarea"}))
 
+(def job-location (reagent/atom {:id "job-location" :label "Location" :type "text" :validator v/required}))
+(def job-location-description (reagent/atom {:id "job-location-description" :label "E.G: San Francisco, London, Anywhere" :type "description"}))
+
+(def job-description (reagent/atom {:id "job-description" :label "Description" :type "markdown"}))
+
+(def job-company-name (reagent/atom {:id "job-company-name" :label "Company Name"}))
 
 
 (defn save-job []
@@ -20,13 +29,20 @@
   )
 
 
-(def job-button (reagent/atom {:id "job-button" :label "Save" :on-click save-job}))
+(def job-button (reagent/atom {:type "button-group"
+                               :buttons [{:id "job-button-save" :label "Save" :on-click save-job}
+                                         {:id "job-button-publish" :label "Save & Publish" :on-click save-job}]}))
 
 
 (defn job-form []
   (input/form-aligned  
    job-form-state
-   [job-title job-description]
+   [job-title
+    job-title-description
+    job-type
+    job-location
+    job-location-description
+    job-description]
    job-button))
 
 
