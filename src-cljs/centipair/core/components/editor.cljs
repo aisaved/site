@@ -6,30 +6,51 @@
             [centipair.core.utilities.dom :as dom]))
 
 
+
 (def markdown-html-channel (chan))
 
 
+
+(def html-tags [[#"&" "&amp;"]  [#"<" "&lt;"] [#">" "&gt;"]])
+
+
+(defn clean-html-tags [text rule]
+  (clojure.string.replace text (first rule) (second rule)))
+
+
+(defn sanitize [text]
+  (reduce clean-html-tags text html-tags))
 
 (defn markdown-html-preview
   [field]
   [:div (:html field)])
 
 
+
+(defn update-markdown-channel [field]
+  (put! markdown-html-channel 
+        [(str "markdown-preview-" (:id @field))
+         (:value @field)]))
+
+
 (defn update-markdown-value
   [field value]
-    (reset! field (assoc @field :value value))
-    (put! markdown-html-channel [field value]))
+    (reset! field (assoc @field :value value)))
 
 
 (defn apply-preview [field]
-  (dom/innerHtml "markdown-preview" (:html @field)))
+  (dom/innerHtml (str "markdown-preview-" (:id @field)) (:html @field)))
 
 
-(defn generate-preview [field-value-group]
-  (let [field (first field-value-group)
-        value (second field-value-group)]
-    (reset! field (assoc @field :html (md->html (js/safe_tags_regex value))))
-    (apply-preview field)))
+
+(defn generate-preview [id-value-group]
+  (.log js/console (first id-value-group))
+  (.log js/console (second id-value-group))
+  (let [id (first id-value-group)
+        md-text (second id-value-group)
+        html (md->html (sanitize md-text))]
+    (dom/innerHtml id html)))
+
 
 
 
@@ -40,17 +61,18 @@
    [:div {:class "col-sm-6" :key (str "divider-" (:id @field))}
     [:div {:key (str "markdown-editor-container" (:id @field))}
      [:ul {:class "nav nav-tabs" :key (str "markdown-editor-menu-container-" (:id @field))}
-      [:li {:class "active" :role "presentation" :key (str "markdown-editor-preview-" (:id @field))}
+      [:li {:class "active" :role "presentation" :key (str "markdown-editor-preview-button-" (:id @field))}
        [:a {:href "#md-editor" 
             :aria-controls "md-editor"
             :role "tab"
-            :data-toggle "tab"
-            :on-click #(apply-preview field)} "Editor"]]
+            :data-toggle "tab"} "Editor"]]
       [:li {:class "" :role "presentation"}
        [:a {:href "#md-preview" 
             :aria-controls "md-preview"
             :role "tab"
-            :data-toggle "tab"} "Preview"]]]
+            :data-toggle "tab"
+            :on-click #(update-markdown-channel field)}
+        "Preview"]]]
      [:div {:class "tab-content"}
       [:div {:class "tab-pane active" :role "tab-panel" :id "md-editor"}
        [:div {:class (if (nil? (:class-name @field)) style/bootstrap-input-container-class (:class-name @field))
@@ -73,7 +95,7 @@
                  (:message @field))]]]
       [:div {:class "tab-pane" :role "tab-panel" :id "md-preview"}
        [:div {:class "panel panel-default"}
-        [:div {:id "markdown-preview" :class "panel-body"}]]]]]]])
+        [:div {:id (str "markdown-preview-" (:id @field))  :class "panel-body"}]]]]]]])
 
 
 

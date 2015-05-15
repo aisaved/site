@@ -10,4 +10,5 @@
   (do
     (notifier/render-notifier-component)
     (csrf/fetch-csrf-token)
-    (render-components)))
+    ;;(render-components)
+    ))
