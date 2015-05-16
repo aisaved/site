@@ -3,7 +3,7 @@
             [centipair.routes.home :refer [home-routes]]
             [centipair.core.auth.user.routes :refer [user-routes]]
             [centipair.core.auth.user.api :refer [api-user-routes]]
-            [centipair.projects.routes :refer [dashboard-routes]]
+            [centipair.job.routes :refer [dashboard-routes]]
             [centipair.middleware
              :refer [development-middleware production-middleware]]
             [centipair.session :as session]

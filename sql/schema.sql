@@ -104,3 +104,18 @@ CREATE TABLE page(
 CREATE INDEX page_url_index on page (page_url);
 
 
+CREATE TABLE job(
+       job_id serial PRIMARY KEY,
+       job_title VARCHAR (1024) NOT NULL,
+       job_type VARCHAR (50) NOT NULL,
+       job_location VARCHAR (1024) NOT NULL,
+       job_description text,
+       job_how_to_apply text,
+       job_company_name VARCHAR (255) NOT NULL,
+       job_company_location VARCHAR (255) NOT NULL,
+       job_active BOOLEAN NOT NULL DEFAULT false,
+       job_created_date TIMESTAMP NOT NULL,
+       job_published_date TIMESTAMP NOT NULL,
+       job_updated_date TIMESTAMP NOT NULL,
+       job_expiry_date TIMESTAMP NOT NULL
+       )

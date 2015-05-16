@@ -24,7 +24,10 @@
 (def job-company-name (reagent/atom {:id "job-company-name" :label "Company Name"}))
 
 (def how-to-apply (reagent/atom {:id "how-to-apply" :label "How to apply" :type "textarea"}))
-(def company-name (reagent/atom {:id "company-name" :label "Company name" :type "text"}))
+(def apply-description (reagent/atom {:id "apply-description" :label "Expain how someone can apply to this job" :type "description"}))
+(def company-name (reagent/atom {:id "company-name" :label "Company / Contact Name" :type "text"}))
+(def company-name-description (reagent/atom {:id "company-name-description" :label "E.G: Scott Williams, TechnoType Inc" :type "description"}))
+(def company-location (reagent/atom {:id "company-location" :label "Company / Contact Location" :type "text"}))
 
 (defn save-job []
   
@@ -46,7 +49,10 @@
     job-location-description
     job-description
     how-to-apply
-    company-name]
+    apply-description
+    company-name
+    company-name-description
+    company-location]
    job-button))
 
 

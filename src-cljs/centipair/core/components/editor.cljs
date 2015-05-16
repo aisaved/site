@@ -19,7 +19,10 @@
 
 
 (defn sanitize [text]
-  (reduce clean-html-tags text html-tags))
+  (.log js.console text)
+  (if (= text nil)
+    ""
+    (reduce clean-html-tags text html-tags)))
 
 (defn markdown-html-preview
   [field]
@@ -44,8 +47,6 @@
 
 
 (defn generate-preview [id-value-group]
-  (.log js/console (first id-value-group))
-  (.log js/console (second id-value-group))
   (let [id (first id-value-group)
         md-text (second id-value-group)
         html (md->html (sanitize md-text))]

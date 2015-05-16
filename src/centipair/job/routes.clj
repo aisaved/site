@@ -1,4 +1,4 @@
-(ns centipair.projects.routes
+(ns centipair.job.routes
   (:require [centipair.layout :as layout]
             [compojure.core :refer [defroutes GET]]
             [centipair.core.contrib.response :as response]))
