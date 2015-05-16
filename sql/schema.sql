@@ -115,7 +115,18 @@ CREATE TABLE job(
        job_company_location VARCHAR (255) NOT NULL,
        job_active BOOLEAN NOT NULL DEFAULT false,
        job_created_date TIMESTAMP NOT NULL,
-       job_published_date TIMESTAMP NOT NULL,
+       job_published_date TIMESTAMP NULL,
        job_updated_date TIMESTAMP NOT NULL,
-       job_expiry_date TIMESTAMP NOT NULL
-       )
+       job_expiry_date TIMESTAMP NOT NULL);
+
+
+CREATE TABLE job_editor(
+       job_editor_id serial PRIMARY KEY,
+       user_account_id integer,
+       job_id integer,
+       CONSTRAINT job_editor_user_account_id_fkey FOREIGN KEY (user_account_id)
+       REFERENCES user_account (user_account_id) MATCH SIMPLE 
+       ON DELETE CASCADE,
+       CONSTRAINT job_editor_job_id_fkey FOREIGN KEY (job_id)
+       REFERENCES job (job_id) MATCH SIMPLE 
+       ON DELETE CASCADE);

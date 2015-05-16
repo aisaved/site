@@ -6,7 +6,7 @@
 
 
 
-
+(def job-id (reagent/atom {:id "job-id"}))
 (def job-form-state (reagent/atom {:id "job-form" :type "form" :title "Post a job"}))
 (def job-title-description (reagent/atom {:id "job-title-description" :type "description" :label "E.G: Software Engineer at Company"}))
 (def job-title (reagent/atom {:id "job-title" :label "Job Title" :type "text" :validator v/required}))
@@ -21,13 +21,12 @@
 
 (def job-description (reagent/atom {:id "job-description" :label "Description" :type "markdown" :description "This editor supports markdown. Click privew to view your post"}))
 
-(def job-company-name (reagent/atom {:id "job-company-name" :label "Company Name"}))
 
-(def how-to-apply (reagent/atom {:id "how-to-apply" :label "How to apply" :type "textarea"}))
-(def apply-description (reagent/atom {:id "apply-description" :label "Expain how someone can apply to this job" :type "description"}))
-(def company-name (reagent/atom {:id "company-name" :label "Company / Contact Name" :type "text"}))
-(def company-name-description (reagent/atom {:id "company-name-description" :label "E.G: Scott Williams, TechnoType Inc" :type "description"}))
-(def company-location (reagent/atom {:id "company-location" :label "Company / Contact Location" :type "text"}))
+(def job-how-to-apply (reagent/atom {:id "job-how-to-apply" :label "How to apply" :type "textarea"}))
+(def job-apply-description (reagent/atom {:id "job-apply-description" :label "Expain how someone can apply to this job" :type "description"}))
+(def job-company-name (reagent/atom {:id "job-company-name" :label "Company / Contact Name" :type "text"}))
+(def job-company-name-description (reagent/atom {:id "job-company-name-description" :label "E.G: Scott Williams, TechnoType Inc" :type "description"}))
+(def job-company-location (reagent/atom {:id "job-company-location" :label "Company / Contact Location" :type "text"}))
 
 (defn save-job []
   
@@ -48,11 +47,11 @@
     job-location
     job-location-description
     job-description
-    how-to-apply
-    apply-description
-    company-name
-    company-name-description
-    company-location]
+    job-how-to-apply
+    job-apply-description
+    job-company-name
+    job-company-name-description
+    job-company-location]
    job-button))
 
 
