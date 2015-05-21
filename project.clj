@@ -23,6 +23,7 @@
                  [org.clojure/java.jdbc "0.3.6"]
                  [org.postgresql/postgresql "9.2-1002-jdbc4"]
                  [buddy "0.5.2"]
+                 [lib-noir "0.9.9"]
                  [danlentz/clj-uuid "0.1.5"]
                  [com.novemberain/validateur "2.4.2"]
                  [liberator "0.12.2"]

@@ -44,6 +44,13 @@
   (swap! field assoc :value value))
 
 
+(defn update-select-text [key field value]
+ (let [dim (key @field)
+       new-dim (assoc dim :value value)]
+    
+    (reset! field (assoc @field key new-dim))))
+
+
 (defn text
   [field]
   [:div {:class (if (nil? (:class-name @field)) style/bootstrap-input-container-class (:class-name @field)) :key (str "container-" (:id @field))}
@@ -274,6 +281,9 @@
 
 
 
+
+
+
 (defn plain-checkbox
   [field]
   [:div {:class "checkbox" :key (str "container-" (:id @field))}
@@ -308,6 +318,36 @@
    [:label {:class "col-sm-4 message-label"
             :key (str "label-message-" (:id @field))
             } (if (nil? (:message @field))
+             ""
+             (:message @field))]])
+
+
+(defn select-text
+  [field]
+  [:div {:class (if (nil? (:class-name @field)) style/bootstrap-input-container-class (:class-name @field)) :key (str "container-" (:id @field))}
+   [:label {:for (:id @field) :class "col-sm-2 control-label" :key (str "label-" (:id @field))} (:label @field)]
+   [:div {:class (if (nil? (:size @field)) "col-sm-3" (str "col-sm-" (:size @field))) :key (str "divider-text-" (:id @field))}
+    [:input {:class "form-control"
+             :type (:type "text")
+             :id (:id (:text @field))
+             :key (:id (:text @field))
+             :placeholder
+             (if (nil? (:placeholder @field))
+               ""
+               (:placeholder @field))
+             :value (:value (:text @field))
+             :on-change #(update-select-text :text field (-> % .-target .-value) )
+             :disabled (if (:disabled (:text @field)) "disabled" "")
+             }]]
+   [:div {:class "col-sm-3" :key (str "divider-select-" (:id @field))}
+    [:select {:key (:id (:select @field))
+              :class "form-control"
+              :id (:id (:select @field))
+              :on-change #(update-select-text :select field (-> % .-target .-value) )
+              :value (:value (:select @field))
+              :disabled (if (:disabled (:select @field)) "disabled" "")}
+     (doall (map (partial select-option (:value (:select @field))) (:options (:select @field))))]]
+   [:label {:class "col-sm-4 message-label" :key (str "message-" (:id @field))} (if (nil? (:message @field))
              ""
              (:message @field))]])
 
@@ -440,7 +480,8 @@
     "image-spec" (image-spec field)
     "description" (description field)
     "datepicker" (datepicker field)
-    "markdown" (markdown-editor field)))
+    "markdown" (markdown-editor field)
+    "select-text" (select-text field)))
 
 
 (defn form-aligned [form form-fields action-button]

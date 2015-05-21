@@ -98,6 +98,12 @@
 (defn select-to-key [previous each]
   (assoc previous (keyword (:id @each)) (set-select-value-type each)))
 
+(defn select-text-to-key
+  [previous each]
+  (assoc previous 
+    (keyword (:id (:text @each))) (:value (:text @each))
+    (keyword (:id (:select @each))) (:value (:select @each))))
+
 (defn to-key
   "each is an atom"
   [previous each]
@@ -107,6 +113,7 @@
     "image-spec" (image-spec-to-key previous each)
     "hidden" (text-to-key previous each)
     "select" (select-to-key previous each)
+    "select-text" (select-text-to-key previous each)
     (assoc previous (keyword (:id @each)) (set-value-type each))))
 
 

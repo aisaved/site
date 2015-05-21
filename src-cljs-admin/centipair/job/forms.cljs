@@ -2,7 +2,8 @@
   (:require [reagent.core :as reagent]
             [centipair.core.components.input :as input]
             [centipair.core.utilities.validators :as v]
-            [centipair.core.ui :as ui]))
+            [centipair.core.ui :as ui]
+            [centipair.core.utilities.ajax :as ajax]))
 
 
 
@@ -23,14 +24,42 @@
 
 
 (def job-how-to-apply (reagent/atom {:id "job-how-to-apply" :label "How to apply" :type "textarea"}))
+(def job-who-can-apply (reagent/atom {:id "who-can-apply" :label "Who can apply" :type "select"
+                                      :options [{:label "Verified Users" :value "premium"}
+                                                {:label "All Users" :value "all"}
+                                                ]}))
+
+(def job-budget (reagent/atom {:id "job-budget" :label "Job budget" :type "select-text"
+                               :text {:id "job-budget-value"}
+                               :select {:id "job-budget-options" :options [{:label "Hourly" :value "hourly"}
+                                                                            {:label "Weekly" :value "weekly"}
+                                                                            {:label "Monthly" :value "monthly"}
+                                                                            {:label "Annually" :value "annually"}
+                                                                            {:label "Fixed Price" :value "fixed"}]}}))
+
 (def job-apply-description (reagent/atom {:id "job-apply-description" :label "Expain how someone can apply to this job" :type "description"}))
 (def job-company-name (reagent/atom {:id "job-company-name" :label "Company / Contact Name" :type "text"}))
 (def job-company-name-description (reagent/atom {:id "job-company-name-description" :label "E.G: Scott Williams, TechnoType Inc" :type "description"}))
 (def job-company-location (reagent/atom {:id "job-company-location" :label "Company / Contact Location" :type "text"}))
 
 (defn save-job []
-  
-  )
+  []
+  (ajax/form-post
+   job-form-state
+   "/api/job"
+   [job-id
+    job-form-state
+    job-title
+    job-type
+    job-location
+    job-description
+    job-budget
+    job-how-to-apply
+    job-who-can-apply
+    job-budget
+    ]
+   (fn [response]
+     )))
 
 
 (def job-button (reagent/atom {:type "button-group"
@@ -47,8 +76,10 @@
     job-location
     job-location-description
     job-description
+    job-budget
     job-how-to-apply
     job-apply-description
+    job-who-can-apply
     job-company-name
     job-company-name-description
     job-company-location]

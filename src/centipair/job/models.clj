@@ -5,12 +5,35 @@
         centipair.core.contrib.mail
         centipair.core.contrib.time
         centipair.core.utilities.pagination)
-  (:require [centipair.core.contrib.time :as time])
-  )
+  (:require [centipair.core.contrib.time :as time]
+            [validateur.validation :refer :all]
+            [centipair.core.contrib.validator :as validator]))
 
 (defentity job)
+(defentity job-editor)
 
-(defn validate-job [params])
+
+(def job-validator
+  (validation-set
+   (presence-of :job-title :message "Please enter a job title")
+   (presence-of :job-location :message "Please enter the job location")
+   (presence-of :job-how-to-apply :message "Please fill this field")
+   (presence-of :job-company-name :message "Please fill this field")
+   (presence-of :job-company-location :message "Please fill this field")))
+
+
+(defn validate-job [params]
+  (let [validation-result (job-validator params)]
+    (if (valid? validation-result)
+      true
+      [false {:validation-result {:errors validation-result}}])))
+
+
+(defn job-exists? [job-id])
+
+(defn get-all-jobs [])
+
+(defn get-job [job-id])
 
 (defn create-job [params]
   (insert job (values 
@@ -38,7 +61,7 @@
                 :job_company_location (:job-company-location params)
                 :job_updated_date (time/sql-time-now)
                 })
-          (where {:job_id (:params job-id)})))
+          (where {:job_id (params :job-id)})))
 
 
 (defn publish-job []
@@ -48,7 +71,10 @@
                 })))
 
 
-(defn delete-job)
+(defn delete-job [])
 
 
-(defn save-job [])
+(defn save-job [params]
+  (if (validator/has-value? (:job-id params))
+    (update-job params)
+    (create-job params)))
