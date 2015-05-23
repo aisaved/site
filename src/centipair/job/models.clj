@@ -44,9 +44,11 @@
                 :job_how_to_apply (:job-how-to-apply params)
                 :job_company_name (:job-company-name params)
                 :job_company_location (:job-company-location params)
+                :job_budget (:job-budget params)
+                :job_budget_interval (:job-budget-interval params)
                 :job_created_date (time/sql-time-now)
                 :job_updated_date (time/sql-time-now)
-                :job_expiry_date (time/set-time-expiry 183)
+                :job_expiry_date (time/set-time-expiry 183) ;;six months
                 })))
 
 
@@ -64,14 +66,16 @@
           (where {:job_id (params :job-id)})))
 
 
-(defn publish-job []
+(defn publish-job [job-id]
   (update job (set-fields
                {:job_active true
                 :job_published_date (time/sql-time-now)
-                })))
+                })
+          (where {:job_id job-id})))
 
 
-(defn delete-job [])
+(defn delete-job [job-id]
+  (delete job (where {:job_id job-id})))
 
 
 (defn save-job [params]

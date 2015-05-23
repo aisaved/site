@@ -113,6 +113,8 @@ CREATE TABLE job(
        job_how_to_apply text,
        job_company_name VARCHAR (255) NOT NULL,
        job_company_location VARCHAR (255) NOT NULL,
+       job_budget DECIMAL(8,2) NOT NULL DEFAULT 0.0,
+       job_budget_interval VARCHAR (30),
        job_active BOOLEAN NOT NULL DEFAULT false,
        job_created_date TIMESTAMP NOT NULL,
        job_published_date TIMESTAMP NULL,

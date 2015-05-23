@@ -203,7 +203,7 @@
       {:status-code 422 :message "Invalid key"}
       (do
         (update user_account 
-                (set-fields 
+                (set-fields
                  {:password (crypt/encrypt-password (:password params))}) 
                 (where {:user_account_id (:user_account_id password-reset)}))
         {:status-code 200}))))
