@@ -9,6 +9,7 @@
   (.log js/console "error occured")
   (let [status (:status response)]
     (case status
+      401 (notify 401)
       403 (notify 403)
       404 (notify 404)
       405 (notify 405)
@@ -126,6 +127,7 @@
 (defn form-error-handler [form-state form response]
   (let [status (:status response)]
     (case status
+      401 (notify 401)
       403 (notify 403)
       404 (notify 404)
       405 (notify 405)

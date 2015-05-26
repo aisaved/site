@@ -3,7 +3,8 @@
   The user-model methods in this namesapce has to be implemented by the database system file"
   (:require [centipair.core.auth.user.sql :as user-model]
             [validateur.validation :refer :all]
-            [centipair.core.utilities.validators :as v]))
+            [centipair.core.utilities.validators :as v]
+            [centipair.core.contrib.cookies :as cookies]))
 
 ;;Interface
 (defn register-user
@@ -45,6 +46,20 @@
 
 (defn get-user-session [auth-token]
   (user-model/get-user-session auth-token))
+
+
+(defn get-authenticated-user
+  [request]
+  (let [auth-token (cookies/get-auth-token request)]
+    (if (nil? auth-token)
+      nil
+      (get-user-session auth-token))))
+
+(defn logged-in?
+  [request]
+  (if (nil? (get-authenticated-user request))
+    false
+    true))
 
 ;;validations
 (defn email-exist-check

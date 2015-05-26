@@ -23,7 +23,7 @@
 (def job-description (reagent/atom {:id "job-description" :label "Description" :type "markdown" :description "This editor supports markdown. Click privew to view your post"}))
 
 
-(def job-how-to-apply (reagent/atom {:id "job-how-to-apply" :label "How to apply" :type "textarea"}))
+(def job-how-to-apply (reagent/atom {:id "job-how-to-apply" :label "How to apply" :type "textarea" :validator v/required}))
 (def job-who-can-apply (reagent/atom {:id "who-can-apply" :label "Who can apply" :type "select"
                                       :options [{:label "Verified Users" :value "premium"}
                                                 {:label "All Users" :value "all"}
@@ -38,15 +38,15 @@
                                                                             {:label "Fixed Price" :value "fixed"}]}}))
 
 (def job-apply-description (reagent/atom {:id "job-apply-description" :label "Expain how someone can apply to this job" :type "description"}))
-(def job-company-name (reagent/atom {:id "job-company-name" :label "Company / Contact Name" :type "text"}))
+(def job-company-name (reagent/atom {:id "job-company-name" :label "Company / Contact Name" :type "text" :validator v/required}))
 (def job-company-name-description (reagent/atom {:id "job-company-name-description" :label "E.G: Scott Williams, TechnoType Inc" :type "description"}))
-(def job-company-location (reagent/atom {:id "job-company-location" :label "Company / Contact Location" :type "text"}))
+(def job-company-location (reagent/atom {:id "job-company-location" :label "Company / Contact Location" :type "text" :validator v/required}))
 
 (defn save-job []
   []
   (ajax/form-post
    job-form-state
-   "/api/job"
+   "/api/private/job"
    [job-id
     job-form-state
     job-title
@@ -57,8 +57,11 @@
     job-how-to-apply
     job-who-can-apply
     job-budget
+    job-company-location
+    job-company-name
     ]
    (fn [response]
+     (.log js/console response)
      )))
 
 

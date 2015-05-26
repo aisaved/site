@@ -7,7 +7,8 @@
         centipair.core.utilities.pagination)
   (:require [centipair.core.contrib.time :as time]
             [validateur.validation :refer :all]
-            [centipair.core.contrib.validator :as validator]))
+            [centipair.core.contrib.validator :as validator]
+            [centipair.core.auth.user.models :as user-models]))
 
 (defentity job)
 (defentity job-editor)
@@ -28,6 +29,19 @@
       true
       [false {:validation-result {:errors validation-result}}])))
 
+
+(defn get-user-job [user-id job-id]
+  (select job-editor (where {:user_account_id user-id
+                             :job_id job-id})))
+
+(defn job-editor? [request job-id]
+  (let [job-id (:params request)
+        user-account (user-models/get-authenticated-user request)]
+    (if (nil? user-account)
+      false
+      (if (nil? (get-user-job (:user_account_id user-account) job-id))
+        false
+        true))))
 
 (defn job-exists? [job-id])
 

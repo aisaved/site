@@ -10,9 +10,37 @@
             [ring.middleware.session-timeout :refer [wrap-idle-session-timeout]]
             [ring.middleware.session.memory :refer [memory-store]]
             [ring.middleware.format :refer [wrap-restful-format]]
-            
-            
+            [buddy.auth.accessrules :refer [wrap-access-rules error]]
+            [centipair.core.auth.user.models :refer [logged-in?]]
             ))
+
+
+
+
+
+(defn on-error
+  [request value]
+  {:status 403
+   :headers {"Content-Type" "text/html"}
+   :body "Not authorized please <a href='/login'>Login</a>"})
+
+
+(defn on-error-api
+  [request value]
+  {:status 403
+   :headers {"Content-Type" "application/json"}
+   :body "{\"message\":\"not authorized\"}"})
+
+
+(def rules
+  [{:uri "/dashboard*"
+    :handler logged-in?
+    :on-error on-error}
+   {:uri "/private/api/*"
+    :handler logged-in?
+    :on-error on-error-api}
+   ])
+
 
 (defn wrap-servlet-context [handler]
   (fn [request]
@@ -50,6 +78,7 @@
   (-> handler
       
       (wrap-restful-format :formats [:json-kw :edn :transit-json :transit-msgpack])
+      (wrap-access-rules {:rules rules})
       (wrap-idle-session-timeout
         {:timeout (* 60 30)
          :timeout-response (redirect "/")})

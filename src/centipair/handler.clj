@@ -4,6 +4,7 @@
             [centipair.core.auth.user.routes :refer [user-routes]]
             [centipair.core.auth.user.api :refer [api-user-routes]]
             [centipair.job.routes :refer [dashboard-routes]]
+            [centipair.job.api :refer [api-job-routes]]
             [centipair.middleware
              :refer [development-middleware production-middleware]]
             [centipair.session :as session]
@@ -75,6 +76,7 @@
         user-routes
         api-user-routes
         dashboard-routes
+        api-job-routes
         base-routes)
       development-middleware
       production-middleware))

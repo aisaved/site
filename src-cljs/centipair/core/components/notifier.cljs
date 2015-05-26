@@ -5,15 +5,12 @@
 (def notifier-state (atom {:class "notify" :text ""}))
 
 (defn notifier-component []
-  [:div {:class (:class @notifier-state)} (:text @notifier-state)]
-  )
+  [:div {:class (:class @notifier-state)} (:text @notifier-state)])
 
 (defn render-notifier-component []
   (reagent/render
    [notifier-component]
    (. js/document (getElementById "notifier"))))
-
-
 
 
 (defn notify [code & [message]]
@@ -24,6 +21,7 @@
       404 (reset! notifier-state {:class "notify notify-error" :text (if (nil? message) "Resource unavailable" message)})
       500 (reset! notifier-state {:class "notify notify-error" :text (if (nil? message) "Internal Server Error" message)})
       422 (reset! notifier-state {:class "notify notify-error" :text (if (nil? message) "Unprocessable entity" message)})
+      401 (reset! notifier-state {:class "notify notify-error" :text (if (nil? message) "Not Authorized" message)})
       403 (reset! notifier-state {:class "notify notify-error" :text (if (nil? message) "Access Denied" message)})
       405 (reset! notifier-state {:class "notify notify-error" :text (if (nil? message) "Method not allowed" message)})
       (reset! notifier-state {:class "notify" :text ""})))
