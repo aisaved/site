@@ -42,6 +42,13 @@
 (def job-company-name-description (reagent/atom {:id "job-company-name-description" :label "E.G: Scott Williams, TechnoType Inc" :type "description"}))
 (def job-company-location (reagent/atom {:id "job-company-location" :label "Company / Contact Location" :type "text" :validator v/required}))
 
+
+
+(defn job-source-url [url]
+  (if (nil? (:value @job-id))
+    "/api/private/job"
+    (str "/api/private/job/" (:value @job-id))))
+
 (defn save-job []
   []
   (ajax/form-post

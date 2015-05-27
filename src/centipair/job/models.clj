@@ -11,7 +11,7 @@
             [centipair.core.auth.user.models :as user-models]))
 
 (defentity job)
-(defentity job-editor)
+(defentity job_editor)
 
 
 (def job-validator
@@ -31,7 +31,7 @@
 
 
 (defn get-user-job [user-id job-id]
-  (select job-editor (where {:user_account_id user-id
+  (select job_editor (where {:user_account_id user-id
                              :job_id job-id})))
 
 (defn job-editor? [request job-id]
@@ -43,9 +43,30 @@
         false
         true))))
 
-(defn job-exists? [job-id])
+(defn job-exists? [job-id]
+  
+  )
 
-(defn get-all-jobs [])
+
+
+(defn get-all-jobs [request]
+  (let [params (:params request)
+        user-account (user-models/get-authenticated-user request)
+        offset-limit-params (offset-limit (:page params) (:per params))
+        owned-jobs (select job_editor
+                             (fields :job_id)
+                             (where {:user_account_id (:user_account_id user-account)}))
+        total (count owned-jobs)
+        job-ids (reduce (fn [previous next] (conj previous (:job_id next))) [] owned-jobs)]
+    
+    (if (> total 0)
+      {:result (select job (where {:job_id [in job-ids]}))
+       :total total
+       :page (if (nil? (:page params)) 0 (Integer. (:page params)))}
+      {:result []
+       :total 0
+       :page 0})))
+
 
 (defn get-job [job-id])
 

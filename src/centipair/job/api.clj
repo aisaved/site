@@ -34,7 +34,10 @@
   :handle-created (fn [context] 
                     (:created context))
   :delete! (fn [context]  (job-models/delete-job source))
-  :delete-enacted? false)
+  :delete-enacted? false
+  :handle-ok (fn [context] (if (nil? source) 
+                             (job-models/get-all-jobs (:request context)) 
+                             (job-models/get-job source))))
 
 
 (defroutes api-job-routes

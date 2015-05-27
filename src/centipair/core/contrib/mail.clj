@@ -22,13 +22,23 @@
                    :body [{:type "text/html"
                            :content email-body}]})))
 
-(defn send-password-reset-email [email password-reset-key]
+(defn send-password-reset-email [params]
   (let [site-data site-settings
         email-body (render-file "email/password-reset.html" 
-                                (assoc site-data :reset-key password-reset-key))]
+                                (assoc site-data :reset-key (:password-reset-key params)))]
     (send-message email-settings
                   {:from (:email site-data)
-                   :to email
+                   :to (:email params)
                    :subject (str "Reset your " (:name site-data) " password")
                    :body [{:type "text/html"
                            :content email-body}]})))
+
+
+
+(defn send-mail [params]
+  
+  )
+
+(defn init-mail-channel []
+  
+  )
