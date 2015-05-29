@@ -14,7 +14,8 @@
             [selmer.parser :as parser]
             [environ.core :refer [env]]
             [cronj.core :as cronj]
-            [clojure.tools.nrepl.server :as nrepl]))
+            [clojure.tools.nrepl.server :as nrepl]
+            [centipair.channels :as channels]))
 
 (defonce nrepl-server (atom nil))
 
@@ -59,7 +60,9 @@
   ;;start the expired session cleanup job
   (cronj/start! session/cleanup-job)
   (timbre/info "\n-=[ centipair started successfully"
-               (when (env :dev) "using the development profile") "]=-"))
+               (when (env :dev) "using the development profile") "]=-")
+  (channels/init-async-channels)
+  )
 
 (defn destroy
   "destroy will be called when your application

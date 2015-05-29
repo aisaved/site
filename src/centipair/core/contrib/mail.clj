@@ -35,10 +35,6 @@
 
 
 
-(defn send-mail [params]
-  
-  )
-
-(defn init-mail-channel []
-  
-  )
+(defn send-mail [mail]
+  (case (:purpose mail)
+    "registration" (send-registration-email (:params mail))))

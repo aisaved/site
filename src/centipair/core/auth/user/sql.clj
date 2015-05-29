@@ -2,13 +2,14 @@
   (:use korma.core
         korma.db
         centipair.core.db.connection
-        centipair.core.contrib.mail
         centipair.core.contrib.time
+        centipair.core.contrib.mail
         centipair.core.utilities.pagination)
   (:require
    [centipair.core.contrib.cookies :as cookies]
    [centipair.core.contrib.cryptography :as crypt]
-   [centipair.core.errors :as errors]))
+   [centipair.core.errors :as errors]
+   [centipair.channels :as channels]))
 
 
 
@@ -65,7 +66,8 @@
   [params]
   (let [user-account (new-user-account params)
         registration-request (create-registration-request user-account)]
-      (future (send-registration-email (assoc registration-request :email (:email user-account))))
+      (channels/send-async-mail {:purpose "registration"
+                                 :params (assoc registration-request :email (:email user-account))})
       registration-success))
 
 

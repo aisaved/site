@@ -2,16 +2,16 @@
   (:require [clojure.core.async
              :as a
              :refer [>! <! >!! <!! go chan buffer close! thread
-                     alts! alts!! timeout]]))
+                     alts! alts!! timeout]]
+            [centipair.core.contrib.mail :as mail]))
 
 
 (def mail-channel (chan))
 
 
 (defn process-email
-  [params]
-  (Thread/sleep (rand 5000))
-  (println params))
+  [mail]
+  (mail/send-mail mail))
 
 (defn init-mail-channel
   []
@@ -21,5 +21,12 @@
 
 
 (defn send-async-mail
-  [params]
-  (go (>! mail-channel params)))
+  [mail]
+  (go (>! mail-channel mail)))
+
+
+
+(defn init-async-channels
+  []
+  (do 
+    (init-mail-channel)))
