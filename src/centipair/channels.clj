@@ -1,4 +1,4 @@
-(ns centipair.core.channels
+(ns centipair.channels
   (:require [clojure.core.async
              :as a
              :refer [>! <! >!! <!! go chan buffer close! thread
