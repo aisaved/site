@@ -103,7 +103,7 @@
   [previous each]
   (assoc previous 
     (keyword (:id (:text @each))) (:value (:text @each))
-    (keyword (:id (:select @each))) (:value (:select @each))))
+    (keyword (:id (:select @each))) (dom/get-value (:id (:select @each)))))
 
 (defn to-key
   "each is an atom"

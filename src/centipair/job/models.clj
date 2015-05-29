@@ -43,6 +43,12 @@
         false
         true))))
 
+
+
+(defn get-job
+  [job-id]
+  (select job (where {:job_id job-id})))
+
 (defn job-exists? [job-id]
   
   )
@@ -68,23 +74,30 @@
        :page 0})))
 
 
-(defn get-job [job-id])
+(defn add-job-editor
+  [job-id user-id]
+  (println job-id)
+  (insert job_editor (values
+                      {:job_id job-id :user_account_id user-id})))
 
-(defn create-job [params]
-  (insert job (values 
-               {:job_title (:job-title params)
-                :job_type (:job-type params)
-                :job_location (:job-location params)
-                :job_description (:job-description params)
-                :job_how_to_apply (:job-how-to-apply params)
-                :job_company_name (:job-company-name params)
-                :job_company_location (:job-company-location params)
-                :job_budget (:job-budget params)
-                :job_budget_interval (:job-budget-interval params)
-                :job_created_date (time/sql-time-now)
-                :job_updated_date (time/sql-time-now)
-                :job_expiry_date (time/set-time-expiry 183) ;;six months
-                })))
+(defn create-job
+  [params]
+  (println (bigdec (:job-budget params)))
+  (let [new-job (insert job (values 
+                             {:job_title (:job-title params)
+                              :job_type (:job-type params)
+                              :job_location (:job-location params)
+                              :job_description (:job-description params)
+                              :job_how_to_apply (:job-how-to-apply params)
+                              :job_company_name (:job-company-name params)
+                              :job_company_location (:job-company-location params)
+                              :job_budget (bigdec (:job-budget params))
+                              :job_budget_interval (:job-budget-interval params)
+                              :job_created_date (time/sql-time-now)
+                              :job_updated_date (time/sql-time-now)
+                              :job_expiry_date (time/set-time-expiry 183) ;;six months
+                              }))]
+    (add-job-editor (:job_id new-job) (:user-account-id params))))
 
 
 (defn update-job [params]

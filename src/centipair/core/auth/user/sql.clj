@@ -213,7 +213,7 @@
   "gets user account from session"
   [auth-token]    
   (select user_account
-          (fields :username :is_admin :user_session.session_expiry)
+          (fields :user_account_id :username :active :is_admin :user_session.session_expiry)
           (with user_session)
           (join :inner user_session (= :user_session.user_account_id :user_account_id))
           (where {:user_session.auth_token auth-token})))

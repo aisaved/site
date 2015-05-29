@@ -29,13 +29,13 @@
                                                 {:label "All Users" :value "all"}
                                                 ]}))
 
-(def job-budget (reagent/atom {:id "job-budget" :label "Job budget" :type "select-text"
-                               :text {:id "job-budget-value"}
-                               :select {:id "job-budget-options" :options [{:label "Hourly" :value "hourly"}
-                                                                            {:label "Weekly" :value "weekly"}
-                                                                            {:label "Monthly" :value "monthly"}
-                                                                            {:label "Annually" :value "annually"}
-                                                                            {:label "Fixed Price" :value "fixed"}]}}))
+(def job-budget (reagent/atom {:id "job-budget-option" :label "Job budget" :type "select-text"
+                               :text {:id "job-budget"}
+                               :select {:id "job-budget-interval" :options [{:label "Hourly" :value "hourly"}
+                                                                   {:label "Weekly" :value "weekly"}
+                                                                   {:label "Monthly" :value "monthly"}
+                                                                   {:label "Annually" :value "annually"}
+                                                                   {:label "Fixed Price" :value "fixed"}]}}))
 
 (def job-apply-description (reagent/atom {:id "job-apply-description" :label "Expain how someone can apply to this job" :type "description"}))
 (def job-company-name (reagent/atom {:id "job-company-name" :label "Company / Contact Name" :type "text" :validator v/required}))
