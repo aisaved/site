@@ -6,6 +6,7 @@
             [goog.events :as events]
             [goog.history.EventType :as EventType]
             [centipair.job.forms :as job-forms]
+            [centipair.job.list :as job-list]
             )
   (:import goog.History))
 
@@ -17,7 +18,7 @@
                   {:label "My Jobs" :url "/jobs" :id "jobs" :active false }
                   {:label "New Job" :url "/job/new" :id "job-new" :active false }
                   {:label "Responses" :url "/responses" :id "responses" :active false}
-                  {:label "Applications" :url "/applications" :id "applications" :active false}]))
+                  {:label "Applications" :url "/job/applied" :id "job-applied" :active false}]))
 
 
 (defn single-menu-component [each]
@@ -87,9 +88,14 @@
   (activate-side-menu-item "job-new")
   (job-forms/render-job-form))
 
+(defroute job-list "/job/list" []
+  
+  )
+
 (defroute jobs "/jobs" []
   (activate-side-menu-item "jobs")
-  )
+  (job-list/fetch-job-list)
+  (job-list/render-job-list))
 
 
 (defroute responses "/responses" []
@@ -97,8 +103,8 @@
   (js/console.log "responses"))
 
 
-(defroute applications "/applications" []
-  (activate-side-menu-item "applications")
+(defroute applications "/job/applied" []
+  (activate-side-menu-item "job-applied")
   (js/console.log "applications"))
 
 

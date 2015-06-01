@@ -119,7 +119,9 @@ CREATE TABLE job(
        job_created_date TIMESTAMP NOT NULL,
        job_published_date TIMESTAMP NULL,
        job_updated_date TIMESTAMP NOT NULL,
-       job_expiry_date TIMESTAMP NOT NULL);
+       job_expiry_date TIMESTAMP NOT NULL,
+       job_applicants_count integer DEFAULT 0
+       );
 
 
 CREATE TABLE job_editor(
@@ -132,3 +134,35 @@ CREATE TABLE job_editor(
        CONSTRAINT job_editor_job_id_fkey FOREIGN KEY (job_id)
        REFERENCES job (job_id) MATCH SIMPLE 
        ON DELETE CASCADE);
+
+
+CREATE TABLE job_applicant(
+       job_applicant_id serial PRIMARY KEY,
+       user_account_id integer,
+       job_id integer,
+       cover_letter text,
+       CONSTRAINT job_applicant_user_account_id_fkey FOREIGN KEY (user_account_id)
+       REFERENCES user_account (user_account_id) MATCH SIMPLE 
+       ON DELETE CASCADE,
+       CONSTRAINT job_applicant_job_id_fkey FOREIGN KEY (job_id)
+       REFERENCES job (job_id) MATCH SIMPLE 
+       ON DELETE CASCADE
+       );
+
+CREATE TABLE job_raw_application(
+       job_raw_application_id serial PRIMARY KEY,
+       job_id integer,
+       cover_letter text,
+       resume text,
+       CONSTRAINT job_raw_application_job_id_fkey FOREIGN KEY (job_id)
+       REFERENCES job (job_id) MATCH SIMPLE 
+       ON DELETE CASCADE
+       );
+
+CREATE TABLE job_credits(
+       user_account_id integer,
+       job_credits integer NOT NULL DEFAULT 0,
+       CONSTRAINT job_credits_user_account_id_fkey FOREIGN KEY (user_account_id)
+       REFERENCES user_account (user_account_id) MATCH SIMPLE 
+       ON DELETE CASCADE,
+       );

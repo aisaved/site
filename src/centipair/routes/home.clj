@@ -36,10 +36,16 @@
 (defn csrf-token []
   (response/json-response {:token *anti-forgery-token*}))
 
+
+(defn predictive-analysis-page []
+  (layout/render "business/predictive-analysis.html")
+  )
+
 (defroutes home-routes
   (GET "/" [] (home-page))
   (GET "/join" [] (join-page))
   (GET "/csrf" [] (csrf-token))
   (GET "/projects" [] (projects-home-page))
   (GET "/services" [] (services-page))
-  (GET "/project/:id/:title" [id title] (projects-page id title)))
+  (GET "/project/:id/:title" [id title] (projects-page id title))
+  (GET "/stock-predictive-analysis" [] (predictive-analysis-page)))
