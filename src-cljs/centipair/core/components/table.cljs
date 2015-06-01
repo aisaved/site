@@ -21,7 +21,7 @@
       [:div {:class "col-sm-1"}
        [:a {:class "btn btn-default"} "Search"]]
       [:div {:class "col-sm-1"}
-       [:a {:href (str "/"
+       [:a {:href (str "#/"
                        (:entity (:create @table-data)) "/create")
           :class "btn btn-primary"} "Create"]]]]])
 
