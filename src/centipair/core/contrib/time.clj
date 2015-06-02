@@ -17,6 +17,10 @@
 (defn expire-days [days]
   (clj-time/plus (clj-time-local/local-now) (clj-time/days days)))
 
+(defn set-expire-days [days]
+  (clj-time-coerce/to-sql-time (expire-days days)))
+
+
 (defn cookie-expire-time [days]
   (f/unparse (f/formatters :rfc822) (clj-time/plus (clj-time/now) (clj-time/days days))))
 

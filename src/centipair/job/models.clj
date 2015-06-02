@@ -95,7 +95,7 @@
                               :job_budget_interval (:job-budget-interval params)
                               :job_created_date (time/sql-time-now)
                               :job_updated_date (time/sql-time-now)
-                              :job_expiry_date (time/set-time-expiry 183) ;;six months
+                              :job_expiry_date (time/set-expire-days 183) ;;six months
                               }))]
     (add-job-editor (:job_id new-job) (:user-account-id params))))
 

@@ -7,6 +7,9 @@
 
 
 
+
+
+
 (def job-id (reagent/atom {:id "job-id"}))
 (def job-form-state (reagent/atom {:id "job-form" :type "form" :title "Post a job"}))
 (def job-title-description (reagent/atom {:id "job-title-description" :type "description" :label "E.G: Software Engineer at Company"}))
@@ -28,6 +31,11 @@
                                       :options [{:label "Verified Users" :value "premium"}
                                                 {:label "All Users" :value "all"}
                                                 ]}))
+(defn validate-job-budget [field]
+  (.log js/console "validating field")
+  (if (v/has-value? (:value (:text field)))
+    {:valid true}
+    {:valid false :message "This field is required"}))
 
 (def job-budget (reagent/atom {:id "job-budget-option" :label "Job budget" :type "select-text"
                                :text {:id "job-budget"}
@@ -35,7 +43,8 @@
                                                                    {:label "Weekly" :value "weekly"}
                                                                    {:label "Monthly" :value "monthly"}
                                                                    {:label "Annually" :value "annually"}
-                                                                   {:label "Fixed Price" :value "fixed"}]}}))
+                                                                   {:label "Fixed Price" :value "fixed"}]}
+                               :validator validate-job-budget}))
 
 (def job-apply-description (reagent/atom {:id "job-apply-description" :label "Expain how someone can apply to this job" :type "description"}))
 (def job-company-name (reagent/atom {:id "job-company-name" :label "Company / Contact Name" :type "text" :validator v/required}))

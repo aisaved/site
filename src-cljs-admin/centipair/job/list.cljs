@@ -36,7 +36,7 @@
    [:td {:key (str "table-column-1-" ((keyword (:id-field @job-data)) row-data))} (:job_title row-data)]
    [:td {:key (str "table-column-2-" ((keyword (:id-field @job-data)) row-data))} (str (:job_expiry_date row-data))]
    [:td {:key (str "table-column-3-" ((keyword (:id-field @job-data)) row-data))}
-    [:a {:href (str "/job/edit/" (:job_id row-data))
+    [:a {:href (str "#/job/edit/" (:job_id row-data))
          :key (str "row-edit-link-" ((keyword (:id-field @job-data)) row-data))} "Edit "]
     [:a {:href "javascript:void(0)" :on-click (partial delete-job (:job_account_id row-data))
         :key (str "row-delete-link-" ((keyword (:id-field @job-data)) row-data)) } " Delete"]]])

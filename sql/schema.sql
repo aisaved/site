@@ -164,5 +164,5 @@ CREATE TABLE job_credits(
        job_credits integer NOT NULL DEFAULT 0,
        CONSTRAINT job_credits_user_account_id_fkey FOREIGN KEY (user_account_id)
        REFERENCES user_account (user_account_id) MATCH SIMPLE 
-       ON DELETE CASCADE,
+       ON DELETE CASCADE
        );
