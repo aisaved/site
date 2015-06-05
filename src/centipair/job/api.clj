@@ -11,7 +11,6 @@
   [request]
   (let [user-account (user-models/get-authenticated-user request)
         params (:params request)]
-    (println user-account)
     (merge params {:user-account-id (:user_account_id user-account)})))
 
 

@@ -3,7 +3,9 @@
             [centipair.core.components.input :as input]
             [centipair.core.utilities.validators :as v]
             [centipair.core.ui :as ui]
-            [centipair.core.utilities.ajax :as ajax]))
+            [centipair.core.utilities.ajax :as ajax]
+            [centipair.core.components.notifier :as notifier]
+            [centipair.admin.url :as admin-url]))
 
 
 
@@ -27,7 +29,7 @@
 
 
 (def job-how-to-apply (reagent/atom {:id "job-how-to-apply" :label "How to apply" :type "textarea" :validator v/required}))
-(def job-who-can-apply (reagent/atom {:id "who-can-apply" :label "Who can apply" :type "select"
+(def job-who-can-apply (reagent/atom {:id "job-who-can-apply" :label "Who can apply" :type "select"
                                       :options [{:label "Verified Users" :value "premium"}
                                                 {:label "All Users" :value "all"}
                                                 ]}))
@@ -77,7 +79,8 @@
     job-company-name
     ]
    (fn [response]
-     (.log js/console response)
+     (notifier/notify 102 "Job saved")
+     (admin-url/entity-url "job/edit" (:job_id response))
      )))
 
 
@@ -105,5 +108,52 @@
    job-button))
 
 
-(defn render-job-form []
+
+(defn map-job-form [response]
+  (input/update-value job-title (:job_title response))
+  (input/update-value job-type (:job_title response))
+  (input/update-value job-location (:job_location response))
+  (input/update-value job-description (:job_description response))
+  (input/update-select-text :text job-budget (:job_budget response))
+  (input/update-select-text :select job-budget (:job_budget_interval response))
+  (input/update-value job-how-to-apply (:job_how_to_apply response))
+  (input/update-value job-who-can-apply (:job_who_can_apply response))
+  (input/update-value job-company-name (:job_company_name response))
+  (input/update-value job-company-location (:job_company_location response)))
+
+(defn fetch-job [id]
+  (input/update-value job-id id)
+  (ajax/get-json
+   (str "api/private/job/" id)
+   nil
+   (fn [response]
+     (map-job-form (first response)))))
+
+
+(defn render-job-form
+  []
   (ui/render job-form "content"))
+
+
+(defn new-job-form
+  []
+  (input/reset-inputs
+   [job-title
+    job-type
+    job-location
+    job-description
+    job-how-to-apply
+    job-who-can-apply
+    job-company-name
+    job-company-location]
+   )
+  (input/update-select-text :text job-budget "")
+  (input/update-select-text :select job-budget "hourly")
+  (render-job-form))
+
+
+(defn edit-job-form
+  [id]
+  (do
+    (fetch-job id)
+    (render-job-form)))

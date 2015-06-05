@@ -86,10 +86,10 @@
 
 (defroute new-job "/job/create" []
   (activate-side-menu-item "job-create")
-  (job-forms/render-job-form))
+  (job-forms/new-job-form))
 
-(defroute job-list "/job/list" []
-  
+(defroute job-list "/job/edit/:id" [id]
+  (job-forms/edit-job-form id)
   )
 
 (defroute jobs "/jobs" []

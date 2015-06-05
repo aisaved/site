@@ -35,11 +35,11 @@
                              :job_id job-id})))
 
 (defn job-editor? [request job-id]
-  (let [job-id (:params request)
-        user-account (user-models/get-authenticated-user request)]
+  (let [job-id (:id (:params request))
+        user-account (user-models/get-authenticated-user request)]    
     (if (nil? user-account)
       false
-      (if (nil? (get-user-job (:user_account_id user-account) job-id))
+      (if (nil? (get-user-job (:user_account_id user-account) (Integer. job-id)))
         false
         true))))
 
@@ -47,11 +47,10 @@
 
 (defn get-job
   [job-id]
-  (select job (where {:job_id job-id})))
+  (select job (where {:job_id (Integer. job-id)})))
 
 (defn job-exists? [job-id]
-  
-  )
+  (not (nil? (get-job job-id))))
 
 
 
@@ -76,19 +75,18 @@
 
 (defn add-job-editor
   [job-id user-id]
-  (println job-id)
   (insert job_editor (values
                       {:job_id job-id :user_account_id user-id})))
 
 (defn create-job
   [params]
-  (println (bigdec (:job-budget params)))
   (let [new-job (insert job (values 
                              {:job_title (:job-title params)
                               :job_type (:job-type params)
                               :job_location (:job-location params)
                               :job_description (:job-description params)
                               :job_how_to_apply (:job-how-to-apply params)
+                              :job_who_can_apply (:job-who-can-apply params)
                               :job_company_name (:job-company-name params)
                               :job_company_location (:job-company-location params)
                               :job_budget (bigdec (:job-budget params))
@@ -97,21 +95,29 @@
                               :job_updated_date (time/sql-time-now)
                               :job_expiry_date (time/set-expire-days 183) ;;six months
                               }))]
-    (add-job-editor (:job_id new-job) (:user-account-id params))))
+    (add-job-editor (:job_id new-job) (:user-account-id params))
+    {:job_id (:job_id new-job)}
+    ))
 
 
-(defn update-job [params]
-  (update job (set-fields
-               {:job_title (:job-title params)
-                :job_type (:job-type params)
-                :job_location (:job-location params)
-                :job_description (:job-description params)
-                :job_how_to_apply (:job-how-to-apply params)
-                :job_company_name (:job-company-name params)
-                :job_company_location (:job-company-location params)
-                :job_updated_date (time/sql-time-now)
-                })
-          (where {:job_id (params :job-id)})))
+(defn update-job
+  [params]
+  (let [updated-job (update job
+                            (set-fields
+                             {:job_title (:job-title params)
+                              :job_type (:job-type params)
+                              :job_location (:job-location params)
+                              :job_description (:job-description params)
+                              :job_how_to_apply (:job-how-to-apply params)
+                              :job_who_can_apply (:job-who-can-apply params)
+                              :job_company_name (:job-company-name params)
+                              :job_company_location (:job-company-location params)
+                              :job_budget (bigdec (:job-budget params))
+                              :job_budget_interval (:job-budget-interval params)
+                              :job_updated_date (time/sql-time-now)
+                              })
+                            (where {:job_id (Integer. (params :job-id))}))]
+    {:job_id (:job-id params)}))
 
 
 (defn publish-job [job-id]
@@ -119,11 +125,11 @@
                {:job_active true
                 :job_published_date (time/sql-time-now)
                 })
-          (where {:job_id job-id})))
+          (where {:job_id (Integer. job-id)})))
 
 
 (defn delete-job [job-id]
-  (delete job (where {:job_id job-id})))
+  (delete job (where {:job_id (Integer. job-id)})))
 
 
 (defn save-job [params]

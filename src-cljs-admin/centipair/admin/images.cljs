@@ -2,9 +2,9 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [centipair.core.utilities.dom :as dom]
             [cljs-uuid-utils.core :as uuid]
-            [cljs.core.async :refer [put! chan <!]]
-            [centipair.admin.channels :refer [product-image-upload-channel]]))
+            [cljs.core.async :refer [put! chan <!]]))
 
+(def  product-image-upload-channel (chan))
 
 (defn toArray
   "To clojurescript array"
