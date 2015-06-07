@@ -135,25 +135,31 @@
   (ui/render job-form "content"))
 
 
+(defn reset-job-form []
+  (do
+    (input/reset-inputs
+     [job-title
+      job-type
+      job-location
+      job-description
+      job-how-to-apply
+      job-who-can-apply
+      job-company-name
+      job-company-location
+      job-budget])
+    ;;(input/update-select-text :text job-budget "")
+    ;;(input/update-select-text :select job-budget "hourly")
+    ))
+
 (defn new-job-form
   []
-  (input/reset-inputs
-   [job-title
-    job-type
-    job-location
-    job-description
-    job-how-to-apply
-    job-who-can-apply
-    job-company-name
-    job-company-location]
-   )
-  (input/update-select-text :text job-budget "")
-  (input/update-select-text :select job-budget "hourly")
+  (reset-job-form)
   (render-job-form))
 
 
 (defn edit-job-form
   [id]
   (do
+    (reset-job-form)
     (fetch-job id)
     (render-job-form)))

@@ -57,7 +57,7 @@
 
 
 .job-list{
-    cursor:pointer;
+    cursor:progress;
     border-bottom: 1px solid #eee;
     padding-top: 8px;
     padding-bottom: 8px;

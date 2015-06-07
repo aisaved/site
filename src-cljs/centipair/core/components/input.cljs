@@ -211,14 +211,14 @@
       (swap! form assoc :message "")
       (action))
     (do
-      (swap! form assoc :message "Invalid data!")
+      ;;(swap! form assoc :message "Invalid data!")
       (notifier/notify 422 "Invalid data submitted"))))
 
 
 (defn button-field [form form-fields action-button]
   [:a {:class (str style/bootstrap-primary-button-class " btn-near") 
        :on-click #(perform-action form (:on-click action-button) form-fields)
-       :disabled ""
+       :disabled (if (nil? (:disabled action-button)) "" "disabled")
        :key (:id action-button)
        } 
    (:label action-button)])
@@ -562,19 +562,24 @@
 
 (defn reset-text-field
   [field]
-  (swap! field assoc :class nil :message "")
+  (swap! field assoc :class-name nil :message "")
   (if (nil? (:default @field))
     (update-value field "")
     (update-value field (:default @field))))
 
 
 (defn reset-check-field [field]
-  (swap! field assoc :class nil :message "")
+  (swap! field assoc :class-name nil :message "")
   (update-check field false))
 
 (defn reset-radio-field [field]
-  (swap! field assoc :class nil :message "")
+  (swap! field assoc :class-name nil :message "")
   (update-radio field ""))
+
+(defn reset-select-text [field]
+  (update-select-text :text field "")
+  (update-select-text :select field "")
+  (swap! field assoc :class-name nil :message ""))
 
 (defn reset-input [field]
   (case (:type @field)
@@ -587,7 +592,8 @@
     "radio" (reset-radio-field field)
     "hidden" (update-value field nil)
     "image-spec" (reset-image-spec field)
-    "markdown" (update-value field "")))
+    "markdown" (update-value field "")
+    "select-text" (reset-select-text field)))
 
 
 (defn disable-input
