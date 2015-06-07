@@ -9,7 +9,7 @@
 ;; :headers
 ;; :total
 
-(def per-page 50)
+(def per-page 20)
 
 
 (defn search-list-bar [table-data]
@@ -37,7 +37,7 @@
 (defn page-button [table-data page-count]
   [:li {:class (if (= page-count (:page @table-data)) "active" "")
         :key (str (:id @table-data) "-page-button-list-" page-count)}
-   [:a {:href (str "#/site/" (:site-settings-id @table-data) "/" (:url @table-data) "/" (str page-count))
+   [:a {:href (str "#/" (:url @table-data) "/" (str page-count))
         :key (str (:id @table-data) "-page-button-link-" page-count)} (str page-count)]])
 
 
@@ -48,8 +48,8 @@
 (defn previous-button [table-data]
   [:li {:class (if (previous-button-disabled? table-data) "disabled" "")}
      [:a {:href (if (previous-button-disabled? table-data) 
-                  (str "#/site/" (:site-settings-id @table-data) "/" (:url @table-data) "/" (str (:page @table-data)))
-                  (str "#/site/" (:site-settings-id @table-data) "/" (:url @table-data) "/" (str (- (:page @table-data) 1))))}
+                  (str  "#/" (:url @table-data) "/" (str (:page @table-data)))
+                  (str  "#/" (:url @table-data) "/" (str (- (:page @table-data) 1))))}
       [:span {:aria-hidden "true"} "<<" ]]])
 
 
@@ -60,15 +60,11 @@
 (defn next-button [table-data]
   [:li {:class (if (next-button-disabled? table-data) "disabled" "")}
      [:a {:href (if (next-button-disabled? table-data)
-                  (str "#/site/"
-                       (:site-settings-id @table-data)
-                       "/"
+                  (str "#/"
                        (:url @table-data)
                        "/"
                        (str (:page @table-data)))
-                  (str "#site/"
-                       (:site-settings-id @table-data)
-                       "/"
+                  (str "#/"
                        (:url @table-data)
                        "/"
                        (str (+ (:page @table-data) 1))))}

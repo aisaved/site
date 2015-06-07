@@ -15,7 +15,7 @@
 
 (def admin-menu (reagent/atom 
                  [{:label "Dashboard" :url "/dashboard" :id "dashboard" :active false}
-                  {:label "My Jobs" :url "/jobs" :id "jobs" :active false }
+                  {:label "My Jobs" :url "/jobs/0" :id "jobs" :active false }
                   {:label "New Job" :url "/job/create" :id "job-create" :active false }
                   {:label "Responses" :url "/responses" :id "responses" :active false}
                   {:label "Applications" :url "/job/applied" :id "job-applied" :active false}]))
@@ -92,9 +92,9 @@
   (job-forms/edit-job-form id)
   )
 
-(defroute jobs "/jobs" []
+(defroute jobs "/jobs/:page-number" [page-number]
   (activate-side-menu-item "jobs")
-  (job-list/fetch-job-list)
+  (job-list/fetch-job-list page-number)
   (job-list/render-job-list))
 
 

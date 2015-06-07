@@ -34,7 +34,17 @@
                            :content email-body}]})))
 
 
+(defn send-test-email [mail]
+  (println "sending test email")
+  (send-message email-settings
+                {:from "test@centipair.com"
+                 :to "devasiajosephtest@gmail.com"
+                 :subject (str "testing email number - " (:body mail))
+                 :body (str "test email number -" (:body mail) )}))
+
 
 (defn send-mail [mail]
+  (println "sending email")
   (case (:purpose mail)
-    "registration" (send-registration-email (:params mail))))
+    "registration" (send-registration-email (:params mail))
+    "test" (send-test-email (:params mail))))

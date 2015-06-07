@@ -2,7 +2,8 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [centipair.core.style :as style]
             [centipair.core.utilities.validators :refer [has-value?]]
-            [centipair.core.components.editor :refer [markdown-editor]]))
+            [centipair.core.components.editor :refer [markdown-editor]]
+            [centipair.core.components.notifier :as notifier]))
 
 
 (defn update-value
@@ -209,7 +210,9 @@
     (do
       (swap! form assoc :message "")
       (action))
-    (swap! form assoc :message "Invalid data!")))
+    (do
+      (swap! form assoc :message "Invalid data!")
+      (notifier/notify 422 "Invalid data submitted"))))
 
 
 (defn button-field [form form-fields action-button]

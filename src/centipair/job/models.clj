@@ -65,7 +65,9 @@
         job-ids (reduce (fn [previous next] (conj previous (:job_id next))) [] owned-jobs)]
     
     (if (> total 0)
-      {:result (select job (where {:job_id [in job-ids]}))
+      {:result (select job (where {:job_id [in job-ids]})
+                       (limit (:limit offset-limit-params))
+                       (offset (:offset offset-limit-params)))
        :total total
        :page (if (nil? (:page params)) 0 (Integer. (:page params)))}
       {:result []
