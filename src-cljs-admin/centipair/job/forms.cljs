@@ -80,8 +80,7 @@
     ]
    (fn [response]
      (notifier/notify 102 "Job saved")
-     (admin-url/entity-url "job/edit" (:job_id response))
-     )))
+     (admin-url/entity-url "job/edit" (:job_id response)))))
 
 
 (def job-button (reagent/atom {:type "button-group"
@@ -146,10 +145,7 @@
       job-who-can-apply
       job-company-name
       job-company-location
-      job-budget])
-    ;;(input/update-select-text :text job-budget "")
-    ;;(input/update-select-text :select job-budget "hourly")
-    ))
+      job-budget])))
 
 (defn new-job-form
   []
