@@ -46,10 +46,10 @@
 
 
 (defn update-select-text [key field value]
- (let [dim (key @field)
-       new-dim (assoc dim :value value)]
-    
-    (reset! field (assoc @field key new-dim))))
+ (let [dim (key @field)]
+    (if (nil? (:default dim))
+      (reset! field (assoc @field key (assoc dim :value value)))
+      (reset! field (assoc @field key (assoc dim :value (:default dim)))))))
 
 
 (defn text
