@@ -8,10 +8,12 @@
   (:require [centipair.core.contrib.time :as time]
             [validateur.validation :refer :all]
             [centipair.core.contrib.validator :as validator]
-            [centipair.core.auth.user.models :as user-models]))
+            [centipair.core.auth.user.models :as user-models]
+            [clojure.string :refer [trim split]]))
 
 (defentity job)
 (defentity job_editor)
+(defentity job_tag)
 
 
 (def job-validator
@@ -44,14 +46,13 @@
         true))))
 
 
-
 (defn get-job
   [job-id]
   (select job (where {:job_id (Integer. job-id)})))
 
+
 (defn job-exists? [job-id]
   (not (nil? (get-job job-id))))
-
 
 
 (defn get-all-jobs [request]
@@ -80,6 +81,36 @@
   (insert job_editor (values
                       {:job_id job-id :user_account_id user-id})))
 
+
+(defn add-tag
+  [job-id tag]
+  (if (not (nil? tag))
+    (insert job_tag (values {:job_id (Integer. job-id) :job_tag_name tag}))))
+
+
+(defn clean-tag
+  [tag]
+  (let [trimmed (trim tag)]
+    (if (validator/has-value? trimmed)
+      trimmed
+      nil)))
+
+
+(defn delete-job-tags
+  [job-id]
+  (println job-id)
+  (delete job_tag (where {:job_id (Integer. job-id)})))
+
+
+(defn create-job-tags
+  [job-id tags]
+  (delete-job-tags job-id)
+  (let  [tags (split tags #",")
+         cleaned-tags (map clean-tag tags)]
+    (doseq [tag cleaned-tags]
+      (add-tag job-id tag))))
+
+
 (defn create-job
   [params]
   (let [new-job (insert job (values 
@@ -93,13 +124,15 @@
                               :job_company_location (:job-company-location params)
                               :job_budget (bigdec (:job-budget params))
                               :job_budget_interval (:job-budget-interval params)
+                              :job_tags (:job-tags params)
                               :job_created_date (time/sql-time-now)
                               :job_updated_date (time/sql-time-now)
                               :job_expiry_date (time/set-expire-days 183) ;;six months
                               }))]
-    (add-job-editor (:job_id new-job) (:user-account-id params))
-    {:job_id (:job_id new-job)}
-    ))
+    (do
+      (add-job-editor (:job_id new-job) (:user-account-id params))
+      (create-job-tags (:job_id new-job) (:job-tags params)))
+    {:job_id (:job_id new-job)}))
 
 
 (defn update-job
@@ -119,6 +152,8 @@
                               :job_updated_date (time/sql-time-now)
                               })
                             (where {:job_id (Integer. (params :job-id))}))]
+    (do
+      (create-job-tags (:job-id params) (:job-tags params)))
     {:job_id (:job-id params)}))
 
 

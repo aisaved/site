@@ -116,12 +116,22 @@ CREATE TABLE job(
        job_company_location VARCHAR (255) NOT NULL default 'Not specified',
        job_budget DECIMAL(8,2) NOT NULL DEFAULT 0.0,
        job_budget_interval VARCHAR (30),
+       job_tags text,
        job_active BOOLEAN NOT NULL DEFAULT false,
        job_created_date TIMESTAMP NOT NULL,
        job_published_date TIMESTAMP NULL,
        job_updated_date TIMESTAMP NOT NULL,
        job_expiry_date TIMESTAMP NOT NULL,
        job_applicants_count integer DEFAULT 0
+       );
+
+CREATE TABLE job_tag(
+       job_tag_id serial PRIMARY KEY,
+       job_id integer,
+       job_tag_name varchar (100),
+       CONSTRAINT job_tag_job_id_fkey FOREIGN KEY (job_id)
+       REFERENCES job (job_id) MATCH SIMPLE 
+       ON DELETE CASCADE
        );
 
 

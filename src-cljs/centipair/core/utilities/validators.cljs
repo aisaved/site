@@ -32,6 +32,11 @@
   [v len]
   (>= (count v) len))
 
+(defn is-float?
+  "Returns true if a valid float"
+  [value]
+  (not (js/isNaN (js/parseFloat value))))
+
 
 ;;error message for required field 
 (def required-field-error "This field is required")

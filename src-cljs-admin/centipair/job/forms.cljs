@@ -19,7 +19,8 @@
 (def job-type (reagent/atom {:id "job-type" :label "Type" :type "select"
                              :options [{:label "Full time" :value "full-time"}
                                        {:label "Part time" :value "part-time"}
-                                       {:label "Contract" :value "contract"}]}))
+                                       {:label "Contract" :value "contract"}
+                                       {:label "Freelancer" :value "freelancer"}]}))
 
 
 (def job-location (reagent/atom {:id "job-location" :label "Location" :type "text" :validator v/required}))
@@ -31,27 +32,45 @@
 (def job-how-to-apply (reagent/atom {:id "job-how-to-apply" :label "How to apply" :type "textarea" :validator v/required}))
 (def job-who-can-apply (reagent/atom {:id "job-who-can-apply" :label "Who can apply" :type "select"
                                       :options [{:label "Verified Users" :value "premium"}
-                                                {:label "All Users" :value "all"}
-                                                ]}))
-(defn validate-job-budget [field]
-  (.log js/console "validating field")
-  (if (v/has-value? (:value (:text field)))
-    {:valid true}
+                                                {:label "All Users" :value "all"}]}))
+
+
+(defn valid-budget
+  [field]
+  (let [value (js/parseFloat (:value (:text field)))]
+    (case (:value (:select field))
+      "hourly" (if (< value 25) {:valid false :message "Hourly budget must be atleast $25"} {:valid true})
+      "weekly" (if (< value 1000) {:valid false :message "Weekly budget must be atleast $1000"} {:valid true})
+      "monthly" (if (< value 4500) {:valid false :message "Monthly budget must be atleast $4500"} {:valid true})
+      "annually" (if (< value 54000) {:valid false :message "Annual budget must be atleast $54000"} {:valid true})
+      "fixed" (if (< value 10000) {:valid false :message "Fixed budget must be atleast $10000"} {:valid true}))))
+
+
+(defn validate-job-budget
+  [field]
+  (if (v/is-float? (:value (:text field)))
+    (valid-budget field)
     {:valid false :message "This field is required"}))
 
-(def job-budget (reagent/atom {:id "job-budget-option" :label "Job budget" :type "select-text"
+
+(def job-budget (reagent/atom {:id "job-budget-option" :label "Job budget (US dollars)" :type "select-text"
                                :text {:id "job-budget"}
-                               :select {:id "job-budget-interval" :options [{:label "Hourly" :value "hourly"}
-                                                                   {:label "Weekly" :value "weekly"}
-                                                                   {:label "Monthly" :value "monthly"}
-                                                                   {:label "Annually" :value "annually"}
-                                                                   {:label "Fixed Price" :value "fixed"}]}
+                               :select {:id "job-budget-interval"
+                                        :options [{:label "Hourly" :value "hourly"}
+                                                  {:label "Weekly" :value "weekly"}
+                                                  {:label "Monthly" :value "monthly"}
+                                                  {:label "Annually" :value "annually"}
+                                                  {:label "Fixed Price" :value "fixed"}]
+                                        :default "hourly"}
                                :validator validate-job-budget}))
+
 
 (def job-apply-description (reagent/atom {:id "job-apply-description" :label "Expain how someone can apply to this job" :type "description"}))
 (def job-company-name (reagent/atom {:id "job-company-name" :label "Company / Contact Name" :type "text" :validator v/required}))
 (def job-company-name-description (reagent/atom {:id "job-company-name-description" :label "E.G: Scott Williams, TechnoType Inc" :type "description"}))
 (def job-company-location (reagent/atom {:id "job-company-location" :label "Company / Contact Location" :type "text" :validator v/required}))
+(def job-tags (reagent/atom {:id "job-tags" :label "Tags" :type "text"}))
+(def job-tags-description (reagent/atom {:id "job-tags-description" :label "Add tags seprated by commas. EG: php developer,fulltime,seattle" :type "description"}))
 
 
 
@@ -77,6 +96,7 @@
     job-budget
     job-company-location
     job-company-name
+    job-tags
     ]
    (fn [response]
      (notifier/notify 102 "Job saved")
@@ -103,7 +123,10 @@
     job-who-can-apply
     job-company-name
     job-company-name-description
-    job-company-location]
+    job-company-location
+    job-tags
+    job-tags-description
+    ]
    job-button))
 
 
@@ -118,7 +141,8 @@
   (input/update-value job-how-to-apply (:job_how_to_apply response))
   (input/update-value job-who-can-apply (:job_who_can_apply response))
   (input/update-value job-company-name (:job_company_name response))
-  (input/update-value job-company-location (:job_company_location response)))
+  (input/update-value job-company-location (:job_company_location response))
+  (input/update-value job-tags (:job_tags response)))
 
 (defn fetch-job [id]
   (input/update-value job-id id)
@@ -145,7 +169,8 @@
       job-who-can-apply
       job-company-name
       job-company-location
-      job-budget])))
+      job-budget
+      job-tags])))
 
 (defn new-job-form
   []

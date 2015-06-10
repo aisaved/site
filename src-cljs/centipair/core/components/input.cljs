@@ -46,10 +46,8 @@
 
 
 (defn update-select-text [key field value]
- (let [dim (key @field)]
-    (if (nil? (:default dim))
-      (reset! field (assoc @field key (assoc dim :value value)))
-      (reset! field (assoc @field key (assoc dim :value (:default dim)))))))
+  (let [dim (key @field)]
+    (reset! field (assoc @field key (assoc dim :value value)))))
 
 
 (defn text
@@ -577,9 +575,10 @@
   (update-radio field ""))
 
 (defn reset-select-text [field]
-  (update-select-text :text field "")
-  (update-select-text :select field "")
+  (update-select-text :text field (:default (:text @field)))
+  (update-select-text :select field (:default (:select @field)))
   (swap! field assoc :class-name nil :message ""))
+
 
 (defn reset-input [field]
   (case (:type @field)
