@@ -149,6 +149,7 @@
                               :job_company_location (:job-company-location params)
                               :job_budget (bigdec (:job-budget params))
                               :job_budget_interval (:job-budget-interval params)
+                              :job_tags (:job-tags params)
                               :job_updated_date (time/sql-time-now)
                               })
                             (where {:job_id (Integer. (params :job-id))}))]
